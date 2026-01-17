@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ params.title }}</title>
+    <style>
+        /* Reset styles */
+        body {
+            margin: 0;
+            padding: 0;
+            min-width: 100%;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+
+        table {
+            border-spacing: 0;
+            font-family: Arial, sans-serif;
+            color: #333333;
+        }
+
+        td {
+            padding: 0;
+        }
+
+        img {
+            border: 0;
+        }
+
+        /* CRI Colors */
+        .cri-red {
+            color: #CC0000;
+        }
+
+        .bg-cri-red {
+            background-color: #CC0000;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+            }
+
+            .article-img {
+                width: 100% !important;
+                height: auto !important;
+            }
+
+            .content-padding {
+                padding: 20px !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+
+    <!-- Main Container -->
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f4f4f4">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+
+                <!-- Wrapper -->
+                <table class="container" width="600" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff"
+                    style="width: 600px; max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" style="padding: 30px 0; border-bottom: 4px solid #CC0000;">
+                            <!-- Replace with actual hosted URL of CRI logo -->
+                            <img src="https://crive.b-cdn.net/wp-content/uploads/2024/09/h60-scuro-1.png"
+                                alt="Croce Rossa Italiana" width="120" style="display: block; width: 120px;" />
+                        </td>
+                    </tr>
+
+                    <!-- Main Title Area -->
+                    <tr>
+                        <td class="content-padding" style="padding: 40px 40px 20px 40px; text-align: center;">
+                            <h2 style="color: #CC0000; font-size: 28px; margin: 0; line-height: 1.2;">
+                                {{ params.title }}
+                            </h2>
+                            <p style="color: #666666; font-size: 16px; margin-top: 10px;">
+                                Ecco gli ultimi aggiornamenti e novità.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Dynamic Articles Loop -->
+                    <tr>
+                        <td class="content-padding" style="padding: 20px 40px;">
+
+                            <!-- BREVO LOOP START -->
+                            {% for article in params.articles %}
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0"
+                                style="margin-bottom: 30px; border-bottom: 1px solid #eeeeee; padding-bottom: 30px;">
+
+                                <!-- Article Image -->
+                                {% if article.imageUrl %}
+                                <tr>
+                                    <td style="padding-bottom: 15px;">
+                                        <img src="{{ article.imageUrl }}" alt="{{ article.title }}" class="article-img"
+                                            width="520"
+                                            style="width: 100%; max-width: 520px; border-radius: 8px; display: block;" />
+                                    </td>
+                                </tr>
+                                {% endif %}
+
+                                <!-- Article Title -->
+                                <tr>
+                                    <td>
+                                        <h3 style="margin: 0; font-size: 20px; line-height: 1.4;">
+                                            <a href="{{ article.link }}" style="color: #CC0000; text-decoration: none;">
+                                                {{ article.title }}
+                                            </a>
+                                        </h3>
+                                    </td>
+                                </tr>
+
+                                <!-- Article Body -->
+                                <tr>
+                                    <td style="padding-top: 10px;">
+                                        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #555555;">
+                                            {{ article.body }}
+                                        </p>
+                                    </td>
+                                </tr>
+
+                                <!-- Read More Button -->
+                                {% if article.link %}
+                                <tr>
+                                    <td style="padding-top: 15px;">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td bgcolor="#CC0000" style="border-radius: 4px;">
+                                                    <a href="{{ article.link }}"
+                                                        style="display: inline-block; padding: 10px 20px; color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14px; border-radius: 4px;">
+                                                        Leggi tutto
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                {% endif %}
+
+                            </table>
+                            {% endfor %}
+                            <!-- BREVO LOOP END -->
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td bgcolor="#f8f8f8" style="padding: 30px; text-align: center; border-top: 1px solid #eeeeee;">
+                            <p style="margin: 0; color: #999999; font-size: 12px;">
+                                © 2026 Croce Rossa Italiana - Comitato di Venezia<br>
+                                Tutti i diritti riservati.
+                            </p>
+                            <p style="margin: 10px 0 0 0; color: #999999; font-size: 12px;">
+                                <a href="#" style="color: #999999; text-decoration: underline;">Disiscriviti</a> |
+                                <a href="https://crivenezia.it"
+                                    style="color: #999999; text-decoration: underline;">Visita il sito</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+                <!-- End Wrapper -->
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+
+</html>

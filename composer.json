@@ -1,0 +1,41 @@
+{
+    "name": "cri/cri-crm-core",
+    "description": "Plugin per la gestione dei corsi della Croce Rossa Italiana con Elementor.",
+    "type": "wordpress-plugin",
+    "license": "Proprietary",
+    "authors": [
+        {
+            "name": "Luca",
+            "email": "luca.forzutti@veneto.cri.it"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CRICRM\\": "includes/"
+        }
+    },
+    "require": {
+        "yahnis-elsts/plugin-update-checker": "^5.0",
+        "scssphp/scssphp": "^2.0"
+    },
+    "require-dev": {
+        "wpackagist-plugin/elementor": "*",
+        "wpackagist-plugin/woocommerce": "*"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "scripts": {
+        "compile-sass": [
+            "@php bin/compile-scss.php"
+        ]
+    }
+}

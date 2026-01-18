@@ -29,7 +29,7 @@ class Widget_Chat extends Widget_Base
 
     public function get_categories()
     {
-        return ['general'];
+        return ['cri_category'];
     }
 
     protected function register_controls()

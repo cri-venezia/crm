@@ -8,9 +8,21 @@ class CRI_CRM_Elementor
 
     public static function init()
     {
+        add_action('elementor/elements/categories_registered', array(__CLASS__, 'register_categories'));
         add_action('elementor/widgets/register', array(__CLASS__, 'register_widgets'));
         add_action('elementor/frontend/after_enqueue_styles', array(__CLASS__, 'enqueue_styles'));
         add_action('elementor/frontend/after_enqueue_scripts', array(__CLASS__, 'enqueue_scripts'));
+    }
+
+    public static function register_categories($elements_manager)
+    {
+        $elements_manager->add_category(
+            'cri_category',
+            [
+                'title' => __('CRI Strumenti', 'cri-crm'),
+                'icon' => 'fa fa-plus',
+            ]
+        );
     }
 
     public static function register_widgets($widgets_manager)
@@ -20,7 +32,7 @@ class CRI_CRM_Elementor
         require_once CRI_CRM_PATH . 'includes/elementor/widgets/class-widget-newsletter.php';
 
         $widgets_manager->register(new \CRICRM\Widgets\Widget_Chat());
-        $widgets_manager->register(new \CRI_CRM_Widget_Campaign()); // Note: Namespace diff in class definition
+        $widgets_manager->register(new \CRI_CRM_Widget_Campaign());
         $widgets_manager->register(new \CRI_CRM_Widget_Newsletter());
     }
 
@@ -45,7 +57,7 @@ class CRI_CRM_Elementor
         wp_register_script('cri-crm-widgets-common', CRI_CRM_URL . 'assets/js/crm-widgets.js', ['jquery'], '1.0.0', true);
 
         // Register aliases for widget dependency
-        wp_register_script('cri-campaign-js', CRI_CRM_URL . 'assets/js/crm-widgets.js', ['jquery'], '1.0.0', true); // Hack: pointing to same file
+        wp_register_script('cri-campaign-js', CRI_CRM_URL . 'assets/js/crm-widgets.js', ['jquery'], '1.0.0', true);
         wp_register_script('cri-newsletter-js', CRI_CRM_URL . 'assets/js/crm-widgets.js', ['jquery'], '1.0.0', true);
 
         // Localize
@@ -59,9 +71,5 @@ class CRI_CRM_Elementor
     }
 }
 
-// Hook into Elementor
-add_action('plugins_loaded', function () {
-    if (did_action('elementor/loaded')) {
-        CRI_CRM_Elementor::init();
-    }
-});
+// Hook into Elementor correctly
+add_action('elementor/init', array('CRI_CRM_Elementor', 'init'));

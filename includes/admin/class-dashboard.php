@@ -23,7 +23,7 @@ class CRI_CRM_Admin
         add_menu_page(
             __('CRI CRM', 'cri-crm'),
             __('CRI CRM', 'cri-crm'),
-            'manage_options', // Security: Admins only
+            'access_cricrm_admin', // Security: Role-based check
             'cricrm-dashboard',
             array($this, 'render_dashboard'),
             'dashicons-heart',
@@ -34,7 +34,7 @@ class CRI_CRM_Admin
             'cricrm-dashboard',
             __('Dashboard', 'cri-crm'),
             __('Dashboard', 'cri-crm'),
-            'manage_options', // Security: Admins only
+            'access_cricrm_admin', // Security: Role-based check
             'cricrm-dashboard',
             array($this, 'render_dashboard')
         );

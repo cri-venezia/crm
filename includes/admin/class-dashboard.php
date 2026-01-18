@@ -16,6 +16,8 @@ class CRI_CRM_Admin
     {
         register_setting('cricrm_options_group', 'cri_crm_gemini_key');
         register_setting('cricrm_options_group', 'cri_crm_brevo_key');
+        register_setting('cricrm_options_group', 'cri_crm_newsletter_page_id');
+        register_setting('cricrm_options_group', 'cri_crm_campaign_page_id');
     }
 
     public function add_menu_pages()

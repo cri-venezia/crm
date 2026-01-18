@@ -179,26 +179,36 @@ class CRI_CRM_API
     {
         $params = $request->get_json_params();
         $subject = sanitize_text_field($params['subject']);
-        $content = wp_kses_post($params['content']); // Allow HTML
+        // 'content' is legacy, now we support 'articles' array
+        $articles = isset($params['articles']) ? $params['articles'] : [];
+
+        // If no articles but 'content' is present, wrap it as a single article (Backward Compat)
+        if (empty($articles) && !empty($params['content'])) {
+            $articles[] = [
+                'title' => 'Comunicazione',
+                'image' => 'https://via.placeholder.com/600x300?text=CRI+Venezia',
+                'content' => wp_kses_post($params['content']),
+                'linkText' => 'Leggi',
+                'linkUrl' => '#'
+            ];
+        }
 
         $api_key = get_option('cri_crm_brevo_key');
         if (empty($api_key)) {
             return new WP_Error('config_error', 'Brevo API Key missing', array('status' => 500));
         }
 
-        // Mock Sending Logic (Real implementation needs Sender ID, Recipient list ID, etc.)
-        // Ideally we would POST to https://api.brevo.com/v3/email/campaigns
+        // Generate HTML Email
+        $html_content = $this->generate_newsletter_html($subject, $articles);
 
-        $url = 'https://api.brevo.com/v3/smtp/email'; // Transactional or Campaign
-
-        // Use current user as sender (if configured in Brevo) or a default
+        $url = 'https://api.brevo.com/v3/smtp/email';
         $sender = array('name' => 'CRI Venezia', 'email' => 'newsletter@crivenezia.org');
 
         $body = array(
             'sender' => $sender,
-            'to' => array(array('email' => 'test@crivenezia.org', 'name' => 'Test List')), // Placeholder
+            'to' => array(array('email' => 'test@crivenezia.org', 'name' => 'Volontari CRI')), // In Prod this would be a List ID
             'subject' => $subject,
-            'htmlContent' => $content
+            'htmlContent' => $html_content
         );
 
         $response = wp_remote_post($url, array(
@@ -216,6 +226,111 @@ class CRI_CRM_API
         }
 
         return rest_ensure_response(array('status' => 'sent', 'details' => json_decode(wp_remote_retrieve_body($response))));
+    }
+
+    private function generate_newsletter_html($subject, $articles)
+    {
+        ob_start();
+?>
+        <!DOCTYPE html>
+        <html>
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                }
+
+                .header {
+                    background-color: #cc0000;
+                    color: #ffffff;
+                    padding: 20px;
+                    text-align: center;
+                }
+
+                .footer {
+                    background-color: #333333;
+                    color: #ffffff;
+                    padding: 20px;
+                    text-align: center;
+                    font-size: 12px;
+                }
+
+                .article {
+                    padding: 20px;
+                    border-bottom: 1px solid #eeeeee;
+                }
+
+                .article img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 4px;
+                    margin-bottom: 15px;
+                }
+
+                .article h2 {
+                    color: #cc0000;
+                    margin-top: 0;
+                }
+
+                .btn {
+                    display: inline-block;
+                    background-color: #cc0000;
+                    color: #ffffff;
+                    text-decoration: none;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    margin-top: 10px;
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>CRI Venezia - News</h1>
+                    <p><?php echo esc_html($subject); ?></p>
+                </div>
+
+                <?php foreach ($articles as $article) : ?>
+                    <div class="article">
+                        <?php if (!empty($article['image'])) : ?>
+                            <img src="<?php echo esc_url($article['image']); ?>" alt="Article Image">
+                        <?php endif; ?>
+
+                        <h2><?php echo esc_html($article['title']); ?></h2>
+                        <p><?php echo nl2br(esc_html($article['content'])); ?></p>
+
+                        <?php if (!empty($article['linkUrl']) && $article['linkUrl'] !== '#') : ?>
+                            <a href="<?php echo esc_url($article['linkUrl']); ?>" class="btn">
+                                <?php echo esc_html($article['linkText'] ?: 'Leggi tutto'); ?>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+
+                <div class="footer">
+                    <p>&copy; <?php echo date('Y'); ?> Croce Rossa Italiana - Comitato di Venezia</p>
+                    <p>Via Nepal, 4 - 30126 Lido di Venezia (VE)</p>
+                </div>
+            </div>
+        </body>
+
+        </html>
+<?php
+        return ob_get_clean();
     }
 
     private function execute_gemini_request($api_key, $contents)

@@ -63,12 +63,22 @@
 
                 <!-- Card 3: Quick Actions -->
                 <div class="bg-red-50 border-l-4 border-[#CC0000] p-4 rounded shadow-sm">
-                    <h3 class="font-bold text-gray-700 text-lg mb-1">Manutenzione</h3>
+                    <h3 class="font-bold text-gray-700 text-lg mb-1">Azioni Rapide</h3>
                     <div class="flex flex-col gap-2 mt-2">
-                        <a href="<?php echo admin_url('admin.php?page=cricrm-dashboard&cricrm_action=import_logs'); ?>" onclick="return confirm('Importare i log da JSON? Assicurati che il file backup/chat_logs.json esista.')" class="bg-white border border-[#CC0000] text-[#CC0000] px-3 py-1 rounded hover:bg-red-50 text-sm transition text-center text-xs">
+                        <?php
+                        $nl_page = get_option('cri_crm_newsletter_page_id');
+                        $cp_page = get_option('cri_crm_campaign_page_id');
+                        ?>
+                        <a href="<?php echo $nl_page ? get_permalink($nl_page) : '#'; ?>" target="_blank" class="bg-white border border-[#CC0000] text-[#CC0000] px-3 py-1 rounded hover:bg-red-50 text-sm transition text-center flex items-center justify-center gap-2">
+                            <span class="dashicons dashicons-email"></span> Invia Newsletter (FE)
+                        </a>
+                        <a href="<?php echo $cp_page ? get_permalink($cp_page) : '#'; ?>" target="_blank" class="bg-white border border-[#CC0000] text-[#CC0000] px-3 py-1 rounded hover:bg-red-50 text-sm transition text-center flex items-center justify-center gap-2">
+                            <span class="dashicons dashicons-megaphone"></span> Nuova Campagna (FE)
+                        </a>
+                        <div class="border-t border-red-200 my-1"></div>
+                        <a href="<?php echo admin_url('admin.php?page=cricrm-dashboard&cricrm_action=import_logs'); ?>" onclick="return confirm('Importare i log da JSON? Assicurati che il file backup/chat_logs.json esista.')" class="text-xs text-gray-500 hover:text-red-600 text-center">
                             ♻️ Importa Backup Log
                         </a>
-                        <a href="<?php echo admin_url('update-core.php'); ?>" class="text-[#CC0000] underline text-xs text-center mt-1">Verifica Aggiornamenti</a>
                     </div>
                 </div>
             </div>
@@ -132,6 +142,14 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Brevo API Key</label>
                                 <input type="password" name="cri_crm_brevo_key" value="<?php echo esc_attr(get_option('cri_crm_brevo_key')); ?>" class="w-full p-2 border rounded focus:ring-red-500 focus:border-red-500">
                             </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ID Pagina Newsletter (Frontend)</label>
+                                <input type="number" name="cri_crm_newsletter_page_id" value="<?php echo esc_attr(get_option('cri_crm_newsletter_page_id')); ?>" class="w-full p-2 border rounded focus:ring-red-500 focus:border-red-500" placeholder="Es. 42">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ID Pagina Campagne (Frontend)</label>
+                                <input type="number" name="cri_crm_campaign_page_id" value="<?php echo esc_attr(get_option('cri_crm_campaign_page_id')); ?>" class="w-full p-2 border rounded focus:ring-red-500 focus:border-red-500" placeholder="Es. 43">
+                            </div>
                         </div>
 
                         <div class="mt-4">
@@ -175,40 +193,133 @@
                         </div>
                         <div class="p-6">
                             <!-- JS driven form -->
+                            <!-- JS driven form -->
                             <form id="cricrm-newsletter-form">
-                                <div class="mb-4">
+                                <div class="mb-6">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Oggetto Email</label>
-                                    <input type="text" id="nl-subject" class="w-full p-2 border rounded focus:ring-red-500 focus:border-red-500" placeholder="Es. Convocazione Assemblea...">
+                                    <input type="text" id="nl-subject" class="w-full p-2 border rounded focus:ring-red-500 focus:border-red-500" placeholder="Es. Notiziario CRI Venezia - Gennaio">
                                 </div>
-                                <div class="mb-4">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Contenuto (HTML supportato)</label>
-                                    <textarea id="nl-content" rows="6" class="w-full p-2 border rounded focus:ring-red-500 focus:border-red-500" placeholder="Scrivi qui il messaggio..."></textarea>
+
+                                <h4 class="font-bold text-gray-700 mb-3 border-b pb-1">Articoli (Max 6)</h4>
+                                <div id="nl-articles-container" class="space-y-6">
+                                    <!-- Articles will be injected here -->
                                 </div>
-                                <button type="button" id="nl-send-btn" class="bg-[#CC0000] text-white px-4 py-2 rounded hover:bg-[#8a0000] transition w-full md:w-auto">
-                                    Invia Newsletter
+
+                                <button type="button" id="nl-add-article-btn" class="mt-4 text-sm text-[#CC0000] border border-[#CC0000] px-3 py-1 rounded hover:bg-red-50 flex items-center gap-1">
+                                    <span class="dashicons dashicons-plus-alt2"></span> Aggiungi Articolo
                                 </button>
-                                <div id="nl-status" class="mt-3 text-sm hidden"></div>
+
+                                <div class="mt-8 border-t pt-4">
+                                    <button type="button" id="nl-send-btn" class="bg-[#CC0000] text-white px-6 py-3 rounded text-lg font-bold hover:bg-[#8a0000] transition w-full md:w-auto flex items-center justify-center gap-2">
+                                        <span class="dashicons dashicons-email"></span> Invia Newsletter
+                                    </button>
+                                </div>
+                                <div id="nl-status" class="mt-3 text-sm hidden font-medium"></div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Simple JS for Newsletter Form (Inline for simplicity) -->
+            <!-- Template for an Article Item -->
+            <template id="nl-article-template">
+                <div class="nl-article-item bg-gray-50 p-4 rounded border border-gray-200 relative">
+                    <button type="button" class="nl-remove-article absolute top-2 right-2 text-gray-400 hover:text-red-600" title="Rimuovi">
+                        <span class="dashicons dashicons-trash"></span>
+                    </button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Titolo Articolo</label>
+                            <input type="text" class="nl-input-title w-full p-2 border rounded text-sm" placeholder="Titolo...">
+                        </div>
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">URL Immagine</label>
+                            <input type="text" class="nl-input-image w-full p-2 border rounded text-sm" placeholder="https://...">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Contenuto Breve</label>
+                            <textarea class="nl-input-content w-full p-2 border rounded text-sm" rows="3" placeholder="Riassunto..."></textarea>
+                        </div>
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Testo Bottone</label>
+                            <input type="text" class="nl-input-btn-text w-full p-2 border rounded text-sm" value="Leggi tutto">
+                        </div>
+                        <div class="col-span-1">
+                            <label class="block text-xs font-bold text-gray-600 uppercase mb-1">URL Bottone</label>
+                            <input type="text" class="nl-input-btn-url w-full p-2 border rounded text-sm" placeholder="https://...">
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Newsletter Script -->
             <script>
                 jQuery(document).ready(function($) {
+                    const maxArticles = 6;
+
+                    // Add Article
+                    $('#nl-add-article-btn').on('click', function() {
+                        const count = $('.nl-article-item').length;
+                        if (count >= maxArticles) {
+                            alert('Massimo ' + maxArticles + ' articoli.');
+                            return;
+                        }
+
+                        const template = $('#nl-article-template').html();
+                        $('#nl-articles-container').append(template);
+                    });
+
+                    // Remove Article
+                    $(document).on('click', '.nl-remove-article', function() {
+                        $(this).closest('.nl-article-item').remove();
+                    });
+
+                    // Add first article by default
+                    if ($('.nl-article-item').length === 0) {
+                        $('#nl-add-article-btn').click();
+                    }
+
+                    // Send Newsletter
                     $('#nl-send-btn').on('click', function() {
                         const btn = $(this);
                         const status = $('#nl-status');
                         const subject = $('#nl-subject').val();
-                        const content = $('#nl-content').val();
 
-                        if (!subject || !content) {
-                            alert('Compila tutti i campi.');
+                        // Collect Articles
+                        const articles = [];
+                        $('.nl-article-item').each(function() {
+                            const title = $(this).find('.nl-input-title').val();
+                            const image = $(this).find('.nl-input-image').val();
+                            const content = $(this).find('.nl-input-content').val();
+                            const btnText = $(this).find('.nl-input-btn-text').val();
+                            const btnUrl = $(this).find('.nl-input-btn-url').val();
+
+                            if (title) { // Only add if title exists
+                                articles.push({
+                                    title: title,
+                                    image: image || 'https://via.placeholder.com/600x300?text=CRI+Venezia', // Fallback
+                                    content: content,
+                                    linkText: btnText || 'Leggi di più',
+                                    linkUrl: btnUrl || '#'
+                                });
+                            }
+                        });
+
+                        if (!subject) {
+                            alert('Inserisci l\'oggetto.');
                             return;
                         }
 
-                        btn.prop('disabled', true).text('Invio in corso...');
+                        if (articles.length === 0) {
+                            alert('Inserisci almeno un articolo.');
+                            return;
+                        }
+
+                        if (!confirm('Stai per inviare la newsletter a TUTTI i volontari. Confermi?')) {
+                            return;
+                        }
+
+                        btn.prop('disabled', true).html('<span class="dashicons dashicons-update spin"></span> Invio in corso...');
                         status.removeClass('hidden text-green-600 text-red-600').text('');
 
                         $.ajax({
@@ -220,18 +331,20 @@
                             contentType: 'application/json',
                             data: JSON.stringify({
                                 subject: subject,
-                                content: content
+                                articles: articles
                             }),
                             success: function(res) {
-                                status.addClass('text-green-600').text('✅ Newsletter inviata con successo!');
-                                btn.prop('disabled', false).text('Invia Newsletter');
-                                $('#nl-subject').val('');
-                                $('#nl-content').val('');
+                                status.addClass('text-green-600').html('<span class="dashicons dashicons-yes"></span> Newsletter inviata con successo!');
+                                btn.prop('disabled', false).html('<span class="dashicons dashicons-email"></span> Invia Newsletter');
+                                // Optional: Reset form
+                                // $('#nl-subject').val('');
+                                // $('#nl-articles-container').empty();
+                                // $('#nl-add-article-btn').click();
                             },
                             error: function(err) {
                                 console.error(err);
-                                status.addClass('text-red-600').html('❌ Errore: ' + (err.responseJSON?.message || 'Errore sconosciuto'));
-                                btn.prop('disabled', false).text('Invia Newsletter');
+                                status.addClass('text-red-600').html('<span class="dashicons dashicons-warning"></span> Errore: ' + (err.responseJSON?.message || 'Errore sconosciuto'));
+                                btn.prop('disabled', false).html('<span class="dashicons dashicons-email"></span> Invia Newsletter');
                             }
                         });
                     });

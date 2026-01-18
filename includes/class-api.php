@@ -214,7 +214,8 @@ class CRI_CRM_API
 
     private function execute_gemini_request($api_key, $contents)
     {
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" . $api_key;
+        // Use Gemini 3.0 Pro Preview (User Mandate)
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-preview:generateContent?key=" . $api_key;
 
         $body = ['contents' => $contents];
 
@@ -225,14 +226,17 @@ class CRI_CRM_API
         ));
 
         if (is_wp_error($response)) {
+            error_log('CRI CRM - Gemini Connection Error: ' . $response->get_error_message());
             return $response;
         }
 
-        $data = json_decode(wp_remote_retrieve_body($response), true);
+        $body_str = wp_remote_retrieve_body($response);
+        $data = json_decode($body_str, true);
 
         if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
             return $data['candidates'][0]['content']['parts'][0]['text'];
         } else {
+            error_log('CRI CRM - Gemini API Error Response: ' . $body_str);
             return new WP_Error('ai_error', 'Invalid AI response', array('status' => 502, 'data' => $data));
         }
     }

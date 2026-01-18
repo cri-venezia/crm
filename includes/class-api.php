@@ -375,4 +375,45 @@ class CRI_CRM_API
             return new WP_Error('ai_error', 'Invalid AI response', array('status' => 502, 'data' => $data));
         }
     }
+    public function check_admin_permission()
+    {
+        return current_user_can('manage_options') || current_user_can('cri_manager');
+    }
+
+    public function handle_update_tags($request)
+    {
+        $params = $request->get_json_params();
+        $user_id = intval($params['user_id']);
+        $tags = sanitize_text_field($params['tags']);
+
+        if (!$user_id) return new WP_Error('no_user', 'User ID mismatch', array('status' => 400));
+
+        update_user_meta($user_id, 'cri_user_tags', $tags);
+        return rest_ensure_response(array('success' => true));
+    }
+
+    public function handle_toggle_role($request)
+    {
+        $params = $request->get_json_params();
+        $user_id = intval($params['user_id']);
+        $role = sanitize_text_field($params['role']);
+        $active = (bool) $params['active'];
+
+        if (!$user_id || !$role) return new WP_Error('missing_params', 'Params missing', array('status' => 400));
+
+        $user = get_userdata($user_id);
+        if (!$user) return new WP_Error('not_found', 'User not found', array('status' => 404));
+
+        // Allowed roles to toggle
+        $allowed = ['cri_newsletter', 'cri_fundraiser', 'cri_manager'];
+        if (!in_array($role, $allowed)) return new WP_Error('forbidden_role', 'Role not managed here', array('status' => 403));
+
+        if ($active) {
+            $user->add_role($role);
+        } else {
+            $user->remove_role($role);
+        }
+
+        return rest_ensure_response(array('success' => true, 'roles' => $user->roles));
+    }
 }

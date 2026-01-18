@@ -28,6 +28,7 @@ function cri_crm_init()
     require_once CRI_CRM_PATH . 'includes/elementor/class-elementor-init.php';
     require_once CRI_CRM_PATH . 'includes/class-roles.php';
     require_once CRI_CRM_PATH . 'includes/class-importer.php';
+    require_once CRI_CRM_PATH . 'includes/class-encryption.php'; // Security
     require_once CRI_CRM_PATH . 'includes/class-cpt.php';
 
     // Admin Dashboard
@@ -35,6 +36,8 @@ function cri_crm_init()
 
     // Initialize Components
     $db = new CRI_CRM_DB();
+    // Encryption must be init BEFORE API/Admin access options
+    $encryption = new CRI_CRM_Encryption();
     $api = new CRI_CRM_API();
     $assets = new CRI_CRM_Assets();
     $user_fields = new CRI_CRM_User_Fields();

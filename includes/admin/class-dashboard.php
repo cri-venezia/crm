@@ -9,6 +9,13 @@ class CRI_CRM_Admin
     public function __construct()
     {
         add_action('admin_menu', array($this, 'add_menu_pages'));
+        add_action('admin_init', array($this, 'register_settings'));
+    }
+
+    public function register_settings()
+    {
+        register_setting('cricrm_options_group', 'cri_crm_gemini_key');
+        register_setting('cricrm_options_group', 'cri_crm_brevo_key');
     }
 
     public function add_menu_pages()

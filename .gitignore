@@ -24,5 +24,5 @@ dist-ssr
 *.sw?
 vendor/*
 wp-content/*
-legacy_vue_app/*
 worker/*
+legacy_vue_app/*

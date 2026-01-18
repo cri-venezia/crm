@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+vendor/*
+wp-content/*
+legacy_vue_app/*
+worker/*

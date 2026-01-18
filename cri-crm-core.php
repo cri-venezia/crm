@@ -27,6 +27,7 @@ function cri_crm_init()
     require_once CRI_CRM_PATH . 'includes/elementor/class-elementor-init.php';
     require_once CRI_CRM_PATH . 'includes/class-roles.php';
     require_once CRI_CRM_PATH . 'includes/class-importer.php';
+    require_once CRI_CRM_PATH . 'includes/class-cpt.php';
 
     // Admin Dashboard
     require_once CRI_CRM_PATH . 'includes/admin/class-dashboard.php';
@@ -37,6 +38,7 @@ function cri_crm_init()
     $assets = new CRI_CRM_Assets();
     $user_fields = new CRI_CRM_User_Fields();
     $importer = new CRI_CRM_Importer();
+    $cpt = new CRI_CRM_CPT();
     $admin = new CRI_CRM_Admin();
     // Elementor is static init via hooks in its class
 

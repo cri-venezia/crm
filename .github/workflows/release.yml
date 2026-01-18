@@ -1,0 +1,36 @@
+name: Release Plugin
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        tools: composer
+
+    - name: Install Dependencies
+      run: composer install --no-dev --optimize-autoloader
+
+    - name: Build Zip
+      run: |
+        mkdir cri-crm-core
+        rsync -r --exclude 'cri-crm-core' --exclude '.git' --exclude '.github' --exclude 'node_modules' --exclude 'legacy_vue_app' . cri-crm-core/
+        zip -r cri-crm-core.zip cri-crm-core
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: cri-crm-core.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

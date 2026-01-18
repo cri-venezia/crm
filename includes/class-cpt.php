@@ -50,7 +50,7 @@ class CRI_CRM_CPT
             'hierarchical'          => true,
             'public'                => true, // Must be public to be viewed by users
             'show_ui'               => true,
-            'show_in_menu'          => true, // Top level menu
+            'show_in_menu'          => 'cricrm-dashboard', // Nested under CRI CRM module
             'menu_position'         => 20,
             'menu_icon'             => 'dashicons-networking', // Network/CRM icon
             'show_in_admin_bar'     => true,

@@ -42,6 +42,20 @@ class CRI_CRM_API
             'callback' => array($this, 'clear_history'),
             'permission_callback' => array($this, 'check_permission')
         ));
+
+        // User Management (Tags)
+        register_rest_route('cricrm/v1', '/user/update-tags', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'handle_update_tags'),
+            'permission_callback' => array($this, 'check_admin_permission')
+        ));
+
+        // User Management (Roles)
+        register_rest_route('cricrm/v1', '/user/toggle-role', array(
+            'methods' => 'POST',
+            'callback' => array($this, 'handle_toggle_role'),
+            'permission_callback' => array($this, 'check_admin_permission')
+        ));
     }
 
     public function check_permission()

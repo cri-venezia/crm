@@ -74,7 +74,7 @@ class Widget_Chat extends Widget_Base
         echo '  <div class="cricrm-chat-input-area">';
         echo '      <input type="text" id="cricrm-chat-input" placeholder="' . __('Scrivi un messaggio...', 'cri-crm') . '" />';
         echo '      <button id="cricrm-chat-send" class="cricrm-btn-send">';
-        echo '          <span class="dashicons dashicons-paperplane"></span>'; // Using WP Dashicons
+        echo '          <i class="fa fa-paper-plane" aria-hidden="true"></i>';
         echo '      </button>';
         echo '  </div>';
         echo '</div>';

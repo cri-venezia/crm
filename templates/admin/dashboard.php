@@ -12,7 +12,7 @@
                 <p class="text-gray-500 mt-1">Pannello di Controllo Operativo</p>
             </div>
             <div class="bg-gray-100 px-4 py-2 rounded-md font-mono text-sm">
-                Versione: 1.0.0
+                Versione: 1.1.1
             </div>
         </div>
 
@@ -96,6 +96,36 @@
                     ?>
                 </tbody>
             </table>
+        </div>
+
+        <!-- Configuration Section -->
+        <div class="bg-white border rounded-lg overflow-hidden mt-8 shadow-sm">
+            <div class="bg-gray-50 px-4 py-3 border-b">
+                <h3 class="font-bold text-gray-700">Configurazione API</h3>
+            </div>
+            <div class="p-6">
+                <form method="post" action="options.php">
+                    <?php settings_fields('cricrm_options_group'); ?>
+                    <?php do_settings_sections('cricrm_options_group'); ?>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gemini API Key (Google AI)</label>
+                            <input type="password" name="cri_crm_gemini_key" value="<?php echo esc_attr(get_option('cri_crm_gemini_key')); ?>" class="w-full p-2 border rounded focus:ring-red-500 focus:border-red-500" placeholder="AIzaSy...">
+                            <p class="text-xs text-gray-500 mt-1">Necessaria per Chat ed Fundraising.</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Brevo API Key (Email)</label>
+                            <input type="password" name="cri_crm_brevo_key" value="<?php echo esc_attr(get_option('cri_crm_brevo_key')); ?>" class="w-full p-2 border rounded focus:ring-red-500 focus:border-red-500" placeholder="xkeysib-...">
+                            <p class="text-xs text-gray-500 mt-1">Necessaria per invio Newsletter.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <?php submit_button('Salva Configurazioni'); ?>
+                    </div>
+                </form>
+            </div>
         </div>
 
     </div>

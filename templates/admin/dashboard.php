@@ -79,7 +79,7 @@
 
                     <!-- Card 2: Chat Logs -->
                     <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded shadow-sm">
-                        <h3 class="font-bold text-gray-700 text-lg mb-1">Conversazioni AI</h3>
+                        <h3 class="font-bold text-gray-700 text-lg mb-1">Conversazioni Erika</h3>
                         <p class="text-3xl font-bold text-green-600">
                             <?php
                             global $wpdb;
@@ -122,7 +122,7 @@
                             <tr class="text-sm text-gray-500 border-b">
                                 <th class="p-3 font-medium">Utente</th>
                                 <th class="p-3 font-medium">Messaggio</th>
-                                <th class="p-3 font-medium">Risposta AI</th>
+                                <th class="p-3 font-medium">Risposta Erika</th>
                                 <th class="p-3 font-medium">Data</th>
                             </tr>
                         </thead>
@@ -488,8 +488,8 @@
                     <div class="col-span-2">
                         <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
                             <div class="bg-blue-50 px-6 py-4 border-b border-blue-100">
-                                <h3 class="font-bold text-blue-800 text-lg">💡 Generatore Campagne AI</h3>
-                                <p class="text-sm text-gray-600">Crea post social e campagne fundraising con Gemini.</p>
+                                <h3 class="font-bold text-blue-800 text-lg">💡 Generatore Campagne</h3>
+                                <p class="text-sm text-gray-600">Crea post social e campagne fundraising con Erika.</p>
                             </div>
                             <div class="p-6">
                                 <form id="cricrm-campaign-form">
@@ -517,7 +517,7 @@
                                         </select>
                                     </div>
                                     <button type="button" id="cp-generate-btn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full">
-                                        ✨ Genera con AI
+                                        ✨ Genera con Erika
                                     </button>
 
                                     <div id="cp-result-container" class="mt-6 hidden">
@@ -592,9 +592,9 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <div class="mb-4">
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Chiave Erika AI (Google Gemini)</label>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Chiave Attivazione Erika</label>
                                         <input type="password" name="cri_crm_gemini_key" value="<?php echo esc_attr(get_option('cri_crm_gemini_key')); ?>" class="w-full p-2 border rounded focus:ring-red-500 focus:border-red-500">
-                                        <p class="text-xs text-gray-500 mt-1">L'intelligenza di Erika. Inserisci la chiave API di Google AI Studio.</p>
+                                        <p class="text-xs text-gray-500 mt-1">Inserisci il codice di attivazione per abilitare l'intelligenza di Erika.</p>
                                     </div>
                                 </div>
                                 <div>

@@ -36,6 +36,12 @@ class CRI_CRM_API
             'callback' => array($this, 'handle_newsletter'),
             'permission_callback' => array($this, 'check_permission')
         ));
+
+        register_rest_route('cricrm/v1', '/chat', array(
+            'methods' => 'DELETE',
+            'callback' => array($this, 'clear_history'),
+            'permission_callback' => array($this, 'check_permission')
+        ));
     }
 
     public function check_permission()

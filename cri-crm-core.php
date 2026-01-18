@@ -3,7 +3,7 @@
 /**
  * Plugin Name: CRI CRM Core
  * Description: Core CRM functionalities for CRI Venezia (Chat, Admin, Fundraising) - Replaces external Cloudflare Worker.
- * Version: 1.1.1
+ * Version: 1.2.0
  * Author: CRI Venezia
  * Text Domain: cri-crm
  */
@@ -54,6 +54,9 @@ function cri_crm_activate()
 
     CRI_CRM_DB::install();
     CRI_CRM_Roles::create_roles();
+
+    // Flush rules to ensure CPT URLs work immediately
+    flush_rewrite_rules();
 }
 register_activation_hook(__FILE__, 'cri_crm_activate');
 

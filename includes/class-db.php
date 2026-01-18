@@ -63,4 +63,18 @@ class CRI_CRM_DB
             $limit
         ));
     }
+
+    /**
+     * Delete all logs for a specific user.
+     */
+    public function delete_user_logs($user_id)
+    {
+        global $wpdb;
+        $table_name = $wpdb->prefix . self::$table_chat_logs;
+        return $wpdb->delete(
+            $table_name,
+            array('user_id' => $user_id),
+            array('%d')
+        );
+    }
 }

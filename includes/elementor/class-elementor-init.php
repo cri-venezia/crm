@@ -30,10 +30,12 @@ class CRI_CRM_Elementor
         require_once CRI_CRM_PATH . 'includes/elementor/widgets/class-widget-chat.php';
         require_once CRI_CRM_PATH . 'includes/elementor/widgets/class-widget-campaign.php';
         require_once CRI_CRM_PATH . 'includes/elementor/widgets/class-widget-newsletter.php';
+        require_once CRI_CRM_PATH . 'includes/elementor/widgets/class-widget-bio.php';
 
         $widgets_manager->register(new \CRICRM\Widgets\Widget_Chat());
         $widgets_manager->register(new \CRI_CRM_Widget_Campaign());
         $widgets_manager->register(new \CRI_CRM_Widget_Newsletter());
+        $widgets_manager->register(new \CRICRM\Widgets\Widget_Bio());
     }
 
     public static function enqueue_styles()

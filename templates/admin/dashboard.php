@@ -77,8 +77,12 @@
                 <tbody class="text-sm">
                     <?php
                     $db = new CRI_CRM_DB();
-                    // Get last 5 logs (mocking function usage, ensure DB class supports generic fetch or use direct SQL here for dashboard optimization)
-                    $logs = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}cricrm_chat_logs ORDER BY created_at DESC LIMIT 5");
+                    // Security: Show ONLY current user's chats
+                    $current_user_id = get_current_user_id();
+                    $logs = $wpdb->get_results($wpdb->prepare(
+                        "SELECT * FROM {$wpdb->prefix}cricrm_chat_logs WHERE user_id = %d ORDER BY created_at DESC LIMIT 5",
+                        $current_user_id
+                    ));
 
                     if ($logs) {
                         foreach ($logs as $log) {

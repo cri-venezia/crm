@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const chatInput = document.getElementById('cricrm-chat-input');
     const sendBtn = document.getElementById('cricrm-chat-send');
+    const clearBtn = document.getElementById('cricrm-chat-clear');
     const chatHistory = document.getElementById('cricrm-chat-history');
 
     if (!chatInput || !sendBtn) return; // Not on a page with the widget
@@ -42,7 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     // Initial Load
-    // loadHistory(); // Optional: Uncomment to load history on mount
+    // Initial Load
+    loadHistory();
 
     // Send Message Handler
     const handleSend = async () => {
@@ -98,4 +100,30 @@ document.addEventListener('DOMContentLoaded', function () {
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') handleSend();
     });
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', async () => {
+            if (!confirm('Sei sicuro di voler cancellare tutta la cronologia?')) return;
+
+            try {
+                const res = await fetch(`${CRICrmConfig.root}cricrm/v1/chat`, {
+                    method: 'DELETE',
+                    headers: { 'X-WP-Nonce': CRICrmConfig.nonce }
+                });
+
+                if (res.ok) {
+                    chatHistory.innerHTML = '';
+                    // Re-append welcome message (optional, but nice)
+                    // Currently hard to re-fetch settings without reloading, so we just leave empty or reload.
+                    // Let's just create a system message
+                    appendMessage('Cronologia cancellata.', 'model');
+                } else {
+                    alert('Errore durante la cancellazione.');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Errore di connessione.');
+            }
+        });
+    }
 });

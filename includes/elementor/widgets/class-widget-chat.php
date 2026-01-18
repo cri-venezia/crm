@@ -56,12 +56,22 @@ class Widget_Chat extends Widget_Base
 
     protected function render()
     {
+        // Security: Chat is reserved for Admins
+        if (!current_user_can('administrator')) {
+            return;
+        }
+
         $settings = $this->get_settings_for_display();
 
         echo '<div class="cricrm-chat-wrapper">';
         echo '  <div class="cricrm-chat-header">';
-        echo '      <div class="status-indicator online"></div>';
-        echo '      <h3>' . esc_html($this->get_title()) . '</h3>';
+        echo '      <div class="header-left" style="display: flex; align-items: center; gap: 10px;">';
+        echo '          <div class="status-indicator online"></div>';
+        echo '          <h3>' . esc_html($this->get_title()) . '</h3>';
+        echo '      </div>';
+        echo '      <button id="cricrm-chat-clear" title="' . __('Cancella Cronologia', 'cri-crm') . '" style="background:none; border:none; color:white; cursor:pointer;">';
+        echo '          <i class="fa fa-trash" aria-hidden="true"></i>';
+        echo '      </button>';
         echo '  </div>';
 
         echo '  <div id="cricrm-chat-history" class="cricrm-chat-history">';

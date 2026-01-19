@@ -11,7 +11,7 @@ class CRI_CRM_Widget_Campaign extends \Elementor\Widget_Base
 
     public function get_title()
     {
-        return __('Generatore Campagne AI', 'cri-crm');
+        return __('Generatore Campagne', 'cri-crm');
     }
 
     public function get_icon()

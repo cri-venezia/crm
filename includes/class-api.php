@@ -372,7 +372,7 @@ class CRI_CRM_API
             return $data['candidates'][0]['content']['parts'][0]['text'];
         } else {
             error_log('CRI CRM - Gemini API Error Response: ' . $body_str);
-            return new WP_Error('ai_error', 'Invalid AI response', array('status' => 502, 'data' => $data));
+            return new WP_Error('ai_error', 'Invalid response', array('status' => 502, 'data' => $data));
         }
     }
     public function check_admin_permission()

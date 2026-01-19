@@ -16,6 +16,30 @@ class CRI_CRM_Roles
     }
 
     /**
+     * Force refresh of capabilities for our custom roles.
+     * Hooks to admin_init to ensure roles have the latest caps.
+     */
+    public static function refresh_roles_capabilities()
+    {
+        $roles = [
+            'cri_manager' => ['access_cricrm', 'access_cricrm_admin', 'list_users', 'create_users', 'promote_users', 'edit_users'],
+            'cri_newsletter' => ['access_cricrm', 'access_cricrm_admin', 'manage_newsletter'],
+            'cri_fundraiser' => ['access_cricrm', 'access_cricrm_admin', 'manage_fundraising']
+        ];
+
+        foreach ($roles as $role_slug => $caps) {
+            $role = get_role($role_slug);
+            if ($role) {
+                foreach ($caps as $cap) {
+                    if (!$role->has_cap($cap)) {
+                        $role->add_cap($cap);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Create custom roles on Plugin Activation
      */
     public static function create_roles()

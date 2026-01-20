@@ -2,8 +2,8 @@
     <div class="bg-white rounded-lg shadow-md p-4 md:p-6 w-full mx-auto mt-5 flex flex-col">
         <h1 class="text-3xl font-bold text-[#CC0000] mb-4 flex items-center gap-2">
             <!-- Venus Icon SVG -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 fill-current" viewBox="0 0 320 512">
-                <path d="M160 0a160 160 0 1 1 0 320 160 160 0 1 1 0-320zM128 352v64H80c-17.7 0-32 14.3-32 32s14.3 32 32 32h48v32c0 17.7 14.3 32 32 32s32-14.3 32-32V480h48c17.7 0 32-14.3 32-32s-14.3-32-32-32H192V352H128z" />
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 fill-current" viewBox="0 0 384 512">
+                <path d="M80 176a112 112 0 1 1 224 0 112 112 0 1 1 -224 0zM223.9 349.1C305.9 334.1 368 262.3 368 176 368 78.8 289.2 0 192 0S16 78.8 16 176c0 86.3 62.1 158.1 144.1 173.1-.1 1-.1 1.9-.1 2.9l0 64-32 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l32 0 0 32c0 17.7 14.3 32 32 32s32-14.3 32-32l0-32 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-32 0 0-64c0-1 0-1.9-.1-2.9z" />
             </svg>
             Erika
         </h1>

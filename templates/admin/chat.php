@@ -1,10 +1,10 @@
 <div class="wrap cricrm-admin-wrapper">
-    <div class="bg-white rounded-lg shadow-md p-4 md:p-6 max-w-4xl mx-auto mt-5 h-[75vh] md:h-[80vh] flex flex-col">
+    <div class="bg-white rounded-lg shadow-md p-4 md:p-6 w-full mx-auto mt-5 h-[calc(100vh-120px)] flex flex-col">
         <h1 class="text-3xl font-bold text-[#CC0000] mb-4 flex items-center gap-2">
-            <span class="dashicons dashicons-format-chat"></span> Erika - Debug Chat
+            <span class="fa-solid fa-venus"></span> Erika
         </h1>
         <p class="text-sm text-gray-500 mb-4">
-            Utilizza questa interfaccia per testare le risposte di Erika senza dover usare il widget frontend.
+            Utilizza questa interfaccia per interagire con Erika senza dover usare il widget frontend.
             Questa chat è collegata allo stesso account utente.
         </p>
 
@@ -18,7 +18,7 @@
         <div class="flex gap-2">
             <input type="text" id="cri-chat-input" class="flex-1 p-3 border rounded-lg focus:ring-red-500 focus:border-red-500 shadow-sm" placeholder="Scrivi un messaggio a Erika..." onkeydown="if(event.key === 'Enter') document.getElementById('cri-chat-send').click()">
             <button id="cri-chat-send" class="bg-[#CC0000] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#8a0000] transition flex items-center gap-2">
-                <span class="dashicons dashicons-paperplane"></span> Invia
+                <span class="fa-solid fa-paper-plane"></span> Invia
             </button>
         </div>
 
@@ -34,7 +34,9 @@
                 let chatHistory = [];
 
                 function scrollToBottom() {
-                    historyDiv.scrollTop(historyDiv[0].scrollHeight);
+                    setTimeout(() => {
+                        historyDiv.scrollTop(historyDiv[0].scrollHeight);
+                    }, 50); // Small delay to ensure DOM render
                 }
 
                 function renderMessage(role, text) {
@@ -66,6 +68,27 @@
                 `;
                     historyDiv.append(html);
                     scrollToBottom();
+                }
+
+                function showTypingIndicator() {
+                    const html = `
+                    <div id="cri-chat-typing" class="flex justify-start">
+                        <div class="bg-white border border-gray-200 rounded-lg px-4 py-3 shadow-sm flex items-center gap-2">
+                            <div class="text-xs font-bold mr-1 opacity-50">Erika</div>
+                            <div class="flex space-x-1">
+                                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+                                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+                                <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+                            </div>
+                            <span class="text-xs text-gray-400 ml-2">sta scrivendo...</span>
+                        </div>
+                    </div>`;
+                    historyDiv.append(html);
+                    scrollToBottom();
+                }
+
+                function hideTypingIndicator() {
+                    $('#cri-chat-typing').remove();
                 }
 
                 // Load History
@@ -105,6 +128,9 @@
                     chatInput.val('');
                     chatInput.prop('disabled', true);
 
+                    // Show typing indicator
+                    showTypingIndicator();
+
                     // Add to history BEFORE sending to API
                     chatHistory.push({
                         sender: 'user',
@@ -123,6 +149,7 @@
                             history: chatHistory // Send updated history
                         }),
                         success: function(res) {
+                            hideTypingIndicator(); // Hide typing
                             chatInput.prop('disabled', false).focus();
                             if (res.text) {
                                 renderMessage('model', res.text);
@@ -133,6 +160,7 @@
                             }
                         },
                         error: function(err) {
+                            hideTypingIndicator(); // Hide typing
                             chatInput.prop('disabled', false);
                             renderMessage('model', '⚠️ Errore di connessione: ' + (err.responseJSON?.message || 'Server error'));
                         }

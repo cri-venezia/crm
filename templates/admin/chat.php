@@ -1,5 +1,5 @@
 <div class="wrap cricrm-admin-wrapper">
-    <div class="bg-white rounded-lg shadow-md p-4 md:p-6 w-full mx-auto mt-5 h-[calc(100vh-120px)] flex flex-col">
+    <div class="bg-white rounded-lg shadow-md p-4 md:p-6 w-full mx-auto mt-5 flex flex-col">
         <h1 class="text-3xl font-bold text-[#CC0000] mb-4 flex items-center gap-2">
             <span class="fa-solid fa-venus"></span> Erika
         </h1>
@@ -35,8 +35,10 @@
 
                 function scrollToBottom() {
                     setTimeout(() => {
-                        historyDiv.scrollTop(historyDiv[0].scrollHeight);
-                    }, 50); // Small delay to ensure DOM render
+                        $('html, body').animate({
+                            scrollTop: $(document).height()
+                        }, 100);
+                    }, 100);
                 }
 
                 function renderMessage(role, text) {

@@ -34,7 +34,7 @@ class CRI_CRM_Assets
         wp_enqueue_script('tailwind-cdn');
 
         // Font Awesome
-        wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css', [], '6.5.1');
+        wp_enqueue_style('cricrm-font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css', [], '6.5.1');
 
         // Configure Tailwind Theme (CRI Red)
         wp_add_inline_script('tailwind-cdn', "

@@ -22,6 +22,10 @@
             </button>
         </div>
 
+        <!-- Markdown Support -->
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+
         <script>
             jQuery(document).ready(function($) {
                 const historyDiv = $('#cri-chat-history');
@@ -38,11 +42,25 @@
                     const bg = role === 'user' ? 'bg-red-100 text-gray-800' : 'bg-white border border-gray-200 text-gray-700';
                     const name = role === 'user' ? 'Tu' : 'Erika';
 
+                    // Parse Markdown (only for model? No, user might type MD too)
+                    let htmlContent = text;
+                    if (typeof marked !== 'undefined') {
+                        // Configure marked to handle line breaks correctly
+                        marked.use({
+                            breaks: true
+                        });
+                        const rawHtml = marked.parse(text);
+                        htmlContent = DOMPurify.sanitize(rawHtml);
+                    }
+
                     const html = `
                     <div class="flex ${align}">
                         <div class="max-w-[80%] ${bg} rounded-lg px-4 py-2 shadow-sm">
                             <div class="text-xs font-bold mb-1 opacity-50">${name}</div>
-                            <div class="whitespace-pre-wrap text-sm">${text}</div>
+                            <!-- Added 'prose' for proper Markdown styling -->
+                            <div class="prose prose-sm max-w-none leading-normal ${role === 'user' ? 'prose-p:text-gray-800' : 'prose-p:text-gray-700'}">
+                                ${htmlContent}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -87,6 +105,12 @@
                     chatInput.val('');
                     chatInput.prop('disabled', true);
 
+                    // Add to history BEFORE sending to API
+                    chatHistory.push({
+                        sender: 'user',
+                        text: msg
+                    });
+
                     $.ajax({
                         url: '<?php echo esc_url_raw(rest_url('cricrm/v1/chat')); ?>',
                         method: 'POST',
@@ -96,16 +120,12 @@
                         contentType: 'application/json',
                         data: JSON.stringify({
                             message: msg,
-                            history: chatHistory
+                            history: chatHistory // Send updated history
                         }),
                         success: function(res) {
                             chatInput.prop('disabled', false).focus();
                             if (res.text) {
                                 renderMessage('model', res.text);
-                                chatHistory.push({
-                                    sender: 'user',
-                                    text: msg
-                                }); // Update local history too
                                 chatHistory.push({
                                     sender: 'model',
                                     text: res.text

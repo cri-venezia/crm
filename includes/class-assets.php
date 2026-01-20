@@ -30,7 +30,7 @@ class CRI_CRM_Assets
     private function load_tailwind()
     {
         // Tailwind CDN
-        wp_register_script('tailwind-cdn', 'https://cdn.tailwindcss.com', [], '3.4.0', false);
+        wp_register_script('tailwind-cdn', 'https://cdn.tailwindcss.com?plugins=typography', [], '3.4.0', false);
         wp_enqueue_script('tailwind-cdn');
 
         // Configure Tailwind Theme (CRI Red)
